@@ -1,0 +1,36 @@
+1)Quick-Start =>https://rook.io/docs/rook/v0.8/ceph-quickstart.html
+2)CleanUp => https://rook.io/docs/rook/v0.8/ceph-teardown.html
+
+-------------------------QUICK START TO CLUSTER-----------------------------------------
+1)run operator.yaml it is basic building block for rook-ceph
+# verify the rook-ceph-operator, rook-ceph-agent, and rook-discover pods are in the `Running` state before proceeding
+do not forget to use volume plugin in env variable in operator
+        - name: FLEXVOLUME_DIR_PATH
+          value: "/var/lib/kubelet/volumeplugins"
+--kubectl -n rook-ceph-system get pod
+
+2)run cluster.yaml
+#check mgr , mon , osd is up and running
+--kubectl -n rook-ceph get pod
+
+if something is wrong with that comand try set diff dataDirHostPath in chep crd in cluster.yaml
+
+3)then create a filesystem run rook-filesystem.yaml and check
+--kubectl -n rook-ceph get pod -l app=rook-ceph-mds
+then your mds pods are started 
+
+4)for check health and status run rook-toolbox.yaml it is just debugging pod delete it after all is ok 
+kubectl -n rook-ceph exec -it rook-ceph-tools bash
+and check of these command
+--ceph status
+--ceph osd status
+--ceph df
+--rados df
+
+5)run dashboard.yaml for ceph dashboard ui and check for node port if it is running 
+then connect to toolbox and set username and password for that 
+--ceph dashboard set-login-credentials <username> <password>
+
+
+------------------------------ANOTHER QUICK LINKS -----------------------------------
+https://www.linkedin.com/pulse/rookio-ceph-persistent-storage-made-easy-kubernetes-gokul-chandra/
