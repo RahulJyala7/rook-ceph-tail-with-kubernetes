@@ -31,6 +31,29 @@ and check of these command
 then connect to toolbox and set username and password for that 
 --ceph dashboard set-login-credentials <username> <password>
 
+-----------Mount Filesystem------------
+#run rook toolbox and follow
+
+# Create the directory
+--mkdir /tmp/registry
+
+# Detect the mon endpoints and the user secret for the connection
+--mon_endpoints=$(grep mon_host /etc/ceph/ceph.conf | awk '{print $3}')
+--my_secret=$(grep key /etc/ceph/keyring | awk '{print $3}')
+
+#check mon
+--rancher kubectl get svc -n rook-ceph
+
+# Mount the file system
+--sudo mount -t ceph -o name=admin,secret=$my_secret 10.43.160.112:6790,10.43.185.87:6790,10.43.187.163:6790:/ /mnt/botnextfs
+
+# See your mounted file system
+--df -h
+
+#unmount filesystem
+--umount /tmp/registry
+--rmdir /tmp/registry
+
 
 ------------------------------ANOTHER QUICK LINKS -----------------------------------
 https://www.linkedin.com/pulse/rookio-ceph-persistent-storage-made-easy-kubernetes-gokul-chandra/
